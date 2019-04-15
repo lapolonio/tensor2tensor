@@ -1771,6 +1771,20 @@ def transformer_base():
 
 
 @registry.register_hparams
+def bert_base():
+    """HParams for transformer big model on WMT."""
+    hparams = transformer_base()
+    hparams.hidden_size = 768
+    hparams.filter_size = 4 * hparams.hidden_size
+    # Reduce batch size to 2048 from 4096 to be able to train the model on a GPU
+    # with 12 GB memory. For example, NVIDIA TITAN V GPU.
+    hparams.batch_size = 256
+    hparams.num_heads = 12
+    hparams.num_hidden_layers = 12
+    return hparams
+
+
+@registry.register_hparams
 def transformer_big():
   """HParams for transformer big model on WMT."""
   hparams = transformer_base()
